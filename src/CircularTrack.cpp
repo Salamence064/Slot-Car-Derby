@@ -37,3 +37,11 @@ void CircularTrack::draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<
 
     MV->popMatrix();
 }
+
+double CircularTrack::C(Eigen::Vector3d x) const {
+    return (x - pos).norm() - r; // distance from the center of the track to the point x should be equal to the radius
+}
+
+Eigen::Vector3d CircularTrack::gradC(Eigen::Vector3d x) const {
+    return (x - pos).normalized(); // gradient of the constraint function is the normalized vector from the center of the track to the point x
+}

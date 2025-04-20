@@ -28,6 +28,9 @@ public:
 	void tare();
 	void reset();
 	void step();
+
+	void moveClockwise();
+	void moveCounterClockwise();
 	
 	void draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog, const std::shared_ptr<Program> progSimple) const;
 	
@@ -40,7 +43,7 @@ private:
 	
 	std::shared_ptr<Shape> sphereShape;
 	std::shared_ptr<Track> track;
-	std::vector< std::shared_ptr<Particle> > spheres;
+	std::shared_ptr<Particle> car;
 };
 
 #endif

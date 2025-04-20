@@ -12,7 +12,7 @@
 #include "Shape.h"
 
 class Track {
-    protected:
+    public:
         std::shared_ptr<Shape> shape; // shape of the track // todo find a .obj file for a piece of the track
 
         Eigen::Vector3d pos; // position of the track
@@ -33,6 +33,8 @@ class Track {
         }
 
         virtual void draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog) const = 0;
+        virtual double C(Eigen::Vector3d x) const = 0; // constraint function for the track
+        virtual Eigen::Vector3d gradC(Eigen::Vector3d x) const = 0; // gradient of the constraint function
 
         inline Eigen::Vector3d getPos() const { return pos; }
         inline float getScale() const { return scale; }

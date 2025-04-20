@@ -11,4 +11,7 @@ class CircularTrack : public Track {
         CircularTrack(Eigen::Vector3d pos, float scale, double radius);
         virtual ~CircularTrack() {}
         virtual void draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog) const override;
+
+        virtual double C(Eigen::Vector3d x) const override;
+        virtual Eigen::Vector3d gradC(Eigen::Vector3d x) const override;
 };
