@@ -4,7 +4,7 @@
 
 class CircularTrack : public Track {
     private:
-        constexpr static int NUM_SEGMENTS = 100; // number of segments in the circular track
+        constexpr static int NUM_SEGMENTS = 250; // number of segments in the circular track
         double r; // radius of the circular track
 
     public:

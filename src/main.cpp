@@ -218,14 +218,14 @@ void render()
 	prog->bind();
 	glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, glm::value_ptr(P->topMatrix()));
 	MV->pushMatrix();
-	scene->draw(MV, prog);
+	scene->draw(MV, prog, progSimple);
 	MV->popMatrix();
 	prog->unbind();
 	
 	//////////////////////////////////////////////////////
 	// Cleanup
 	//////////////////////////////////////////////////////
-	
+
 	// Pop stacks
 	MV->popMatrix();
 	P->popMatrix();

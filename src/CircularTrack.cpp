@@ -1,21 +1,39 @@
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-#include <GL/glew.h>
-
 #include "CircularTrack.h"
 
-CircularTrack::CircularTrack(Eigen::Vector3d pos, float scale, double radius) : Track(pos, scale), r(radius) {}
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
+CircularTrack::CircularTrack(Eigen::Vector3d pos, float scale, double radius) : Track() {
+    r = radius; // set the radius of the circular track
+    this->pos = pos; // set the position of the circular track
+    this->scale = scale; // set the scale of the circular track
+}
+
+// todo could maybe update to use progSimple instead
 void CircularTrack::draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog) const {
-    glBegin(GL_LINE);
+    MV->pushMatrix();
+    
+        MV->translate(pos(0), pos(1), pos(2)); // translate to the position of the circular track
+        MV->scale(scale); // scale the circular track
 
-    for (int i = 0; i < NUM_SEGMENTS; ++i) {
-        float theta = 2.0f * M_PI * (float)i / (float)NUM_SEGMENTS;
-        float x = r * cos(theta);
-        float z = r * sin(theta);
-        glVertex3f(pos(0) + x, 0.0f, pos(2) + z);
-    }
+        glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
 
-    glEnd();
+        glBegin(GL_LINE_LOOP);
+
+            for (int i = 0; i < NUM_SEGMENTS; ++i) {
+                // calculate the angle for the current segment
+                float theta = 2.0f * M_PI * (float)i / (float)NUM_SEGMENTS;
+
+                // calculate the x, y, z coordinates of the vertex on the circular path
+                float x = r * cos(theta);
+                float y = 0.0f; // y is constant
+                float z = r * sin(theta);
+
+                // draw the vertex
+                glVertex3f(x, y, z);
+            }
+
+        glEnd();
+
+    MV->popMatrix();
 }

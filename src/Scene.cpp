@@ -1,9 +1,9 @@
 #include <iostream>
 
+#include "CircularTrack.h"
 #include "GLSL.h"
 #include "Scene.h"
 #include "Particle.h"
-#include "Cloth.h"
 #include "Shape.h"
 #include "Program.h"
 
@@ -78,13 +78,18 @@ void Scene::step()
 	// todo simulate the car
 }
 
-void Scene::draw(shared_ptr<MatrixStack> MV, const shared_ptr<Program> prog) const
+void Scene::draw(shared_ptr<MatrixStack> MV, const shared_ptr<Program> prog, const shared_ptr<Program> progSimple) const
 {
 	glUniform3fv(prog->getUniform("kdFront"), 1, Vector3f(1.0, 1.0, 1.0).data());
 	for(auto s : spheres) {
 		s->draw(MV, prog);
 	}
-	
-	track->draw(MV, prog);
+
+	prog->unbind();
+
+	progSimple->bind();
+	track->draw(MV, progSimple);
+	progSimple->unbind();
+
 	// todo draw the car
 }

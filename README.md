@@ -1,11 +1,12 @@
 Thomas Ducote 832008563 thomas-ducote@tamu.edu
 
+For compilation you will need to have GLFW, GLEW, GLM, and EIGEN3. They should be stored in your environment variables as GLFW_DIR, GLEW_DIR, GLM_INCLUDE_DIR, and EIGEN3_INCLUDE_DIR respectively.
 To compile run the following commands:
-`mkdir build`
-`cd build`
-`cmake ..`
-`make -j4`
-`./SlotCar ../resources`
+* `mkdir build`
+* `cd build`
+* `cmake ..`
+* `make -j4`
+* `./SlotCar ../resources`
 
 Tasks:
  1. Create a circular track and draw it to the screen
@@ -19,3 +20,4 @@ Tasks:
  9.  Add a ground beneath the track
  10. If the car is moving too fast (i.e. its velocity is above a certain threshold on a turn), don't apply the constraint and let the car fall onto the ground
  11. Add the bouncing effects of the car falling onto the ground
+ 12. (Maybe) add a model for the track to make it look nicer
