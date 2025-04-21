@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "SplineTrack.h"
 #include "CircularTrack.h"
 #include "GLSL.h"
 #include "Scene.h"
@@ -31,7 +32,7 @@ void Scene::load(const string &RESOURCE_DIR)
 	sphereShape = make_shared<Shape>();
 	sphereShape->loadMesh(RESOURCE_DIR + "sphere2.obj");
 	
-	track = make_shared<CircularTrack>(Vector3d(0.0, 0.0, 0.0), 1.0, 1.0);
+	track = make_shared<SplineTrack>(Vector3d(0.0, 0.0, 0.0), 1.0);
 
 	car = make_shared<Particle>(sphereShape);
 }
@@ -39,7 +40,17 @@ void Scene::load(const string &RESOURCE_DIR)
 void Scene::init()
 {
 	sphereShape->init();
-	// todo maybe init the track
+
+	// ! Remember to duplicate the starting and ending control points
+	// initialize the track by adding control points
+	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
+	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
+	track->addControlPoint(glm::vec3(0.0, 0.0, 1.0));
+	track->addControlPoint(glm::vec3(-2.0, 0.0, 0.0));
+	track->addControlPoint(glm::vec3(-1.0, 1.0, 0.0));
+	track->addControlPoint(glm::vec3(0.0, 0.0, -1.0));
+	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
+	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
 	
 	// initialize the car
 	car->r = 0.01;
@@ -68,25 +79,25 @@ void Scene::step()
 {
 	t += h;
 
-	// todo add gravity in the future when we are working with moving up and down (along the y-axis)
-	// update the car's position
-	Vector3d f = car->d * car->v;
-	car->v += (h / car->m) * f;
-	car->p = car->x;
-	car->x += h * car->v;
+	// // todo add gravity in the future when we are working with moving up and down (along the y-axis)
+	// // update the car's position
+	// Vector3d f = car->d * car->v;
+	// car->v += (h / car->m) * f;
+	// car->p = car->x;
+	// car->x += h * car->v;
 
-	// todo might need to add checks for if C or gradC are 0
-	// apply constraints to the car particle
-	double C = track->C(car->x);
-	Vector3d gradC = track->gradC(car->x);
+	// // todo might need to add checks for if C or gradC are 0
+	// // apply constraints to the car particle
+	// double C = track->C(car->x);
+	// Vector3d gradC = track->gradC(car->x);
 
-	double w = 1.0 / car->m;
-	double lambda = -C / (w * gradC.squaredNorm());
+	// double w = 1.0 / car->m;
+	// double lambda = -C / (w * gradC.squaredNorm());
 
-	car->x += lambda * w * gradC;
+	// car->x += lambda * w * gradC;
 
-	// update the car's velocity
-	car->v = (1 / h) * (car->x - car->p);
+	// // update the car's velocity
+	// car->v = (1 / h) * (car->x - car->p);
 }
 
 void Scene::moveClockwise()

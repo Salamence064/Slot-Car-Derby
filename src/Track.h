@@ -32,6 +32,8 @@ class Track {
             // shape->init();
         }
 
+        virtual void addControlPoint(const glm::vec3 &cp) {} // add a control point to the track
+
         virtual void draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog) const = 0;
         virtual double C(Eigen::Vector3d x) const = 0; // constraint function for the track
         virtual Eigen::Vector3d gradC(Eigen::Vector3d x) const = 0; // gradient of the constraint function

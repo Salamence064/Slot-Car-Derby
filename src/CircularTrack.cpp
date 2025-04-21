@@ -9,7 +9,6 @@ CircularTrack::CircularTrack(Eigen::Vector3d pos, float scale, double radius) : 
     this->scale = scale; // set the scale of the circular track
 }
 
-// todo could maybe update to use progSimple instead
 void CircularTrack::draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog) const {
     MV->pushMatrix();
     
