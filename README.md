@@ -11,7 +11,7 @@ To compile run the following commands:
 Tasks:
  1. ~~Create a circular track and draw it to the screen~~
  2. ~~Get a particle to move around the circular track like a slot car would (using 'a' and 'd' or left and right arrow)~~
- 3. Model the track using a spline instead and draw it to the screen
+ 3. ~~Model the track using a spline instead and draw it to the screen~~
  4. Get the particle to move around the spline track like a slot car would
  5. Facilitate movement both up and down
  6. Update to use 2 particles on the track to represent the slots for the car on the track
@@ -22,4 +22,4 @@ Tasks:
  11. Add the bouncing effects of the car falling onto the ground
  12. (Maybe) add a model for the track to make it look nicer
 
-ChatGPT provided me with the constraint equations for both the CircularTrack and the SplineTrack. I also used GitHub Copilot to generate boilerplate code in some of the constructors and other functions.
+ChatGPT provided me with the constraint equations for the CircularTrack. I also used GitHub Copilot to generate boilerplate code in some of the constructors and other functions. The constraint equation for the SplineTrack was created with help from Dr. Sueda.
