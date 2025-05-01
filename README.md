@@ -12,7 +12,7 @@ Tasks:
  1. ~~Create a circular track and draw it to the screen~~
  2. ~~Get a particle to move around the circular track like a slot car would (using 'a' and 'd' or left and right arrow)~~
  3. ~~Model the track using a spline instead and draw it to the screen~~
- 4. Get the particle to move around the spline track like a slot car would
+ 4. ~~Get the particle to move around the spline track like a slot car would~~
  5. Facilitate movement both up and down
  6. Update to use 2 particles on the track to represent the slots for the car on the track
  7. Draw a car model at the appropriate positions given the two slot particles

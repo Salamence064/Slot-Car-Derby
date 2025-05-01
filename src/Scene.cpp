@@ -47,7 +47,7 @@ void Scene::init()
 	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
 	track->addControlPoint(glm::vec3(0.0, 0.0, 1.0));
 	track->addControlPoint(glm::vec3(-2.0, 0.0, 0.0));
-	// track->addControlPoint(glm::vec3(-1.0, 1.0, 0.0));
+	track->addControlPoint(glm::vec3(-1.0, 1.0, 0.0));
 	track->addControlPoint(glm::vec3(0.0, 0.0, -1.0));
 	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
 	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
@@ -95,9 +95,11 @@ void Scene::step()
 	Vector3d gradCn = track->gradCn(car->x);
 
 	double w = 1.0 / car->m;
-	double lambda = -(C / (w * gradC.squaredNorm())) - (Cn / (w * gradCn.squaredNorm()));
+	double lambda = -C / (w * gradC.squaredNorm());
+	double lambdaN = -Cn / (w * gradCn.squaredNorm());
 
-	car->x += lambda * w * gradC;
+	car->x += lambda  * w * gradC;
+	car->x += lambdaN * w * gradCn;
 
 	// update the car's velocity
 	car->v = (1 / h) * (car->x - car->p);
