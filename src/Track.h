@@ -36,7 +36,11 @@ class Track {
 
         virtual void draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog) const = 0;
         virtual double C(Eigen::Vector3d x) const = 0; // constraint function for the track
+        virtual double Cn(Eigen::Vector3d x) const = 0; // constraint function for the track (normal)
         virtual Eigen::Vector3d gradC(Eigen::Vector3d x) const = 0; // gradient of the constraint function
+        virtual Eigen::Vector3d gradCn(Eigen::Vector3d x) const = 0; // gradient of the constraint function (normal)
+        
+        virtual Eigen::Vector3d getForward(Eigen::Vector3d x) const = 0; // get the forward direction of the track at a given point
 
         inline Eigen::Vector3d getPos() const { return pos; }
         inline float getScale() const { return scale; }

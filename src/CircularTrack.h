@@ -13,5 +13,9 @@ class CircularTrack : public Track {
         virtual void draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog) const override;
 
         virtual double C(Eigen::Vector3d x) const override;
+        virtual double Cn(Eigen::Vector3d x) const override;
         virtual Eigen::Vector3d gradC(Eigen::Vector3d x) const override;
+        virtual Eigen::Vector3d gradCn(Eigen::Vector3d x) const override;
+
+        virtual Eigen::Vector3d getForward(Eigen::Vector3d x) const override; // get the forward direction of the track at a given point
 };

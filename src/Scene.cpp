@@ -91,8 +91,11 @@ void Scene::step()
 	double C = track->C(car->x);
 	Vector3d gradC = track->gradC(car->x);
 
+	double Cn = track->Cn(car->x);
+	Vector3d gradCn = track->gradCn(car->x);
+
 	double w = 1.0 / car->m;
-	double lambda = -C / (w * gradC.squaredNorm());
+	double lambda = -(C / (w * gradC.squaredNorm())) - (Cn / (w * gradCn.squaredNorm()));
 
 	car->x += lambda * w * gradC;
 
@@ -102,14 +105,12 @@ void Scene::step()
 
 void Scene::moveClockwise()
 { // todo we'll need to find better values for the speed
-	Eigen::Vector3d r = car->x - track->pos;
-	car->v += 0.01 * Eigen::Vector3d(-r(2), 0.0, r(0));
+	car->v += 0.1 * track->getForward(car->x);
 }
 
 void Scene::moveCounterClockwise()
 { // todo we'll need to find better values for the speed
-	Eigen::Vector3d r = car->x - track->pos;
-	car->v += 0.01 * -Eigen::Vector3d(-r(2), 0.0, r(0));
+	car->v += 0.1 * -track->getForward(car->x);
 }
 
 void Scene::draw(shared_ptr<MatrixStack> MV, const shared_ptr<Program> prog, const shared_ptr<Program> progSimple) const

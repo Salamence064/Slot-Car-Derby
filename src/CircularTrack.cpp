@@ -41,6 +41,22 @@ double CircularTrack::C(Eigen::Vector3d x) const {
     return (x - pos).norm() - r; // distance from the center of the track to the point x should be equal to the radius
 }
 
+double CircularTrack::Cn(Eigen::Vector3d x) const {
+    return 0.0; // normal constraint function is not needed for circular track as it is flat
+}
+
 Eigen::Vector3d CircularTrack::gradC(Eigen::Vector3d x) const {
     return (x - pos).normalized(); // gradient of the constraint function is the normalized vector from the center of the track to the point x
+}
+
+Eigen::Vector3d CircularTrack::gradCn(Eigen::Vector3d x) const {
+    return Eigen::Vector3d(1.0, 0.0, 0.0); // gradient of the normal constraint function is not needed for circular track
+}
+
+Eigen::Vector3d CircularTrack::getForward(Eigen::Vector3d x) const {
+    // calculate the angle of the point x on the circular track
+    float theta = atan2(x(2) - pos(2), x(0) - pos(0)); // angle in radians
+
+    // calculate the forward direction based on the angle
+    return Eigen::Vector3d(-sin(theta), 0.0, cos(theta)); // forward direction is tangent to the circle at point x
 }
