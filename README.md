@@ -1,5 +1,7 @@
 Thomas Ducote 832008563 thomas-ducote@tamu.edu
 
+The .obj file for the car model is from Free3D: https://free3d.com/3d-model/ultracompact-car-v1--571349.html
+
 For compilation you will need to have GLFW, GLEW, GLM, and EIGEN3. They should be stored in your environment variables as GLFW_DIR, GLEW_DIR, GLM_INCLUDE_DIR, and EIGEN3_INCLUDE_DIR respectively.
 To compile run the following commands:
 * `mkdir build`
@@ -13,7 +15,7 @@ Tasks:
  2. ~~Get a particle to move around the circular track like a slot car would (using 'a' and 'd' or left and right arrow)~~
  3. ~~Model the track using a spline instead and draw it to the screen~~
  4. ~~Get the particle to move around the spline track like a slot car would~~
- 5. Facilitate movement both up and down
+ 5. ~~Facilitate movement both up and down~~
  6. Update to use 2 particles on the track to represent the slots for the car on the track
  7. Draw a car model at the appropriate positions given the two slot particles
  8. Add a bounding box of particles with springs connecting them to the car model to allow the car model to naturally sway
