@@ -31,8 +31,8 @@ public:
 	void reset();
 	void step();
 
-	void moveClockwise();
-	void moveCounterClockwise();
+	void moveForward();
+	void moveBackward();
 	
 	void draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog, const std::shared_ptr<Program> progSimple) const;
 	

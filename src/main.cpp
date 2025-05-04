@@ -55,13 +55,12 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 
-	// todo refine
 	else if (key == GLFW_KEY_UP || key == 'W') {
-		scene->moveCounterClockwise();
+		scene->moveForward();
 	}
 
 	else if (key == GLFW_KEY_DOWN || key == 'S') {
-		scene->moveClockwise();
+		scene->moveBackward();
 	}
 }
 

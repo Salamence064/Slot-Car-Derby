@@ -116,14 +116,14 @@ void Scene::step()
 	car->align_car(glm::vec3(forward(0), forward(1), forward(2)));
 }
 
-void Scene::moveClockwise()
-{ // todo we'll need to find better values for the speed
-	slotParticle->v += track->getForward(slotParticle->x);
+void Scene::moveForward()
+{
+	slotParticle->v -= track->getForward(slotParticle->x);
 }
 
-void Scene::moveCounterClockwise()
-{ // todo we'll need to find better values for the speed
-	slotParticle->v += -track->getForward(slotParticle->x);
+void Scene::moveBackward()
+{
+	slotParticle->v += track->getForward(slotParticle->x);
 }
 
 void Scene::draw(shared_ptr<MatrixStack> MV, const shared_ptr<Program> prog, const shared_ptr<Program> progSimple) const

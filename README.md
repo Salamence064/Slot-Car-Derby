@@ -21,6 +21,5 @@ Tasks:
  8. ~~Add a ground beneath the track~~
  9. ~~If the car is moving too fast (i.e. its velocity is above a certain threshold on a turn), don't apply the constraint and let the car fall onto the ground~~
  10. Add the bouncing effects of the car falling onto the ground -- basically, we will be adding collision to the ground
- 11. (Maybe) add a model for the track to make it look nicer
 
 ChatGPT provided me with the constraint equations for the CircularTrack. I also used GitHub Copilot to generate boilerplate code in some of the constructors and other functions. The constraint equation for the SplineTrack was created with help from Dr. Sueda.
