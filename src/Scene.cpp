@@ -65,9 +65,6 @@ void Scene::init()
 	slotParticle->fixed = false;
 	slotParticle->p = slotParticle->x0;
 
-	// finish initializing the track by calling the constraint function to get the cached values
-	track->C(slotParticle->x);
-
 	// orient the car to face the direction of the track
 	Eigen::Vector3d forward = track->getForward(slotParticle->x);
 	car->align_car(glm::vec3(forward(0), forward(1), forward(2)));
