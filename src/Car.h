@@ -24,9 +24,13 @@ class Car {
         float scale; // scale of the car -- the car model is way too big so we'll just use this to scale it down
 
     public:
+        glm::vec3 minVertex; // minimum vertex of the bounding box of the car model
+        glm::vec3 maxVertex; // maximum vertex of the bounding box of the car model
+
         Car(const std::string &resourceDir, std::shared_ptr<Particle> slotParticle);
         ~Car();
 
+        void updateMinMax(); // update the bounding box of the car model
         void align_car(glm::vec3 const &dir); // rotate the car to align with the direction the slot particle is moving in
         void draw(std::shared_ptr<MatrixStack> MV, std::shared_ptr<Program> prog) const;
 };

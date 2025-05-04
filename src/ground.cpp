@@ -26,7 +26,7 @@ void Ground::init()
     float minX = -200.0f, maxX = 200.0f;
     float minZ = -200.0f, maxZ = 200.0f;
 
-    float y = -1.0f; // y coordinate of the ground
+    y = -1.0f; // y coordinate of the ground
 
     // Vert 0
 	posBuf.push_back(minX);

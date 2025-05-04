@@ -25,6 +25,8 @@ class Ground {
         int indCount;
 
     public:
+        float y; // y coordinate of the ground
+
         Ground();
         ~Ground();
 
