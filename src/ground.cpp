@@ -15,6 +15,9 @@ Ground::Ground() :
     bufIDs(),
     indCount(0)
 {
+    restitution = 0.66f; // restitution coefficient for the ground
+    damping = 0.8f; // friction coefficient for the ground
+    y = -1.0f; // y coordinate of the ground
 }
 
 Ground::~Ground()
@@ -25,8 +28,6 @@ void Ground::init()
 {
     float minX = -200.0f, maxX = 200.0f;
     float minZ = -200.0f, maxZ = 200.0f;
-
-    y = -1.0f; // y coordinate of the ground
 
     // Vert 0
 	posBuf.push_back(minX);

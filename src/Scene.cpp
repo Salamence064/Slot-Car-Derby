@@ -68,6 +68,7 @@ void Scene::init()
 	// orient the car to face the direction of the track
 	Eigen::Vector3d forward = track->getForward(slotParticle->x);
 	car->align_car(glm::vec3(forward(0), forward(1), forward(2)));
+	orientation = glm::vec3(forward(0), forward(1), forward(2));
 }
 
 void Scene::tare()
@@ -85,11 +86,26 @@ void Scene::step()
 {
 	t += h;
 
+	if (landed) {
+		slotParticle->x(1) = ground->y + slotParticle->r + 0.05f; // set the y coordinate to the ground level
+		slotParticle->v(1) = 0.0f; // set the y velocity to 0
+		car->align_car(glm::vec3(orientation.x, 0.0f, orientation.z)); // realign the car to face in the direction it was oriented when it fell
+		return;
+	}
+
 	// update the car's position
 	Vector3d f = slotParticle->m * grav - slotParticle->d * slotParticle->v;
 	slotParticle->v += (h / slotParticle->m) * f;
 	slotParticle->p = slotParticle->x;
 	slotParticle->x += h * slotParticle->v;
+
+	// check for ground intersection
+	bool nowTouching = groundIntersection();
+	bool hitThisFrame = nowTouching && !onGround;
+
+	if (hitThisFrame) { handleGroundIntersection(); }
+
+	onGround = nowTouching;
 
 	// todo might need to add checks for if C or gradC are 0
 	// apply constraints to the car particle
@@ -103,26 +119,41 @@ void Scene::step()
 	double lambda = -C / (w * gradC.squaredNorm());
 	double lambdaN = -Cn / (w * gradCn.squaredNorm());
 
+	if (offTrack) {
+		if (slotParticle->v(1) < 0.0) { car->align_car(glm::vec3(orientation.x, orientation.y, orientation.z)); }
+		else { car->align_car(glm::vec3(orientation.x, -orientation.y, orientation.z)); }
+
+		return;
+	}
+
 	// if the car goes too fast, don't apply the constraint and let it fall to the ground
 	if (slotParticle->v.squaredNorm() * track->getCurvature(slotParticle->x) <= maxCentripital) {
 		slotParticle->x += lambda  * w * gradC;
 		slotParticle->x += lambdaN * w * gradCn;
+
+	} else {
+		offTrack = 1;
+		return;
 	}
 
 	// update the car's velocity
 	slotParticle->v = (1 / h) * (slotParticle->x - slotParticle->p);
 
+	// realign the car to face the direction of the track
 	Eigen::Vector3d forward = track->getForward(slotParticle->x);
 	car->align_car(glm::vec3(forward(0), forward(1), forward(2)));
+	orientation = glm::vec3(forward(0), forward(1), forward(2));
 }
 
 void Scene::moveForward()
 {
+	if (offTrack) { return; }
 	slotParticle->v -= track->getForward(slotParticle->x);
 }
 
 void Scene::moveBackward()
 {
+	if (offTrack) { return; }
 	slotParticle->v += track->getForward(slotParticle->x);
 }
 
@@ -136,4 +167,24 @@ void Scene::draw(shared_ptr<MatrixStack> MV, const shared_ptr<Program> prog, con
 	progSimple->bind();
 	track->draw(MV, progSimple);
 	progSimple->unbind();
+}
+
+bool Scene::groundIntersection()
+{
+	return (float) (slotParticle->x(1)) < ground->y;
+}
+
+void Scene::handleGroundIntersection()
+{
+	slotParticle->x(1) = ground->y + slotParticle->r + 0.05f; // set the y coordinate to the ground level);
+	
+	glm::vec3 v = glm::vec3(slotParticle->v(0), slotParticle->v(1), slotParticle->v(2));
+
+	if (std::abs(v.y) < 1.5f) { v.y = 0.0f; landed = 1; } // stop the car if it's going too slow
+	else if (v.y < 0.0) { v.y = -v.y * ground->restitution; } // bounce off the ground
+
+	v.x *= ground->damping; // apply damping
+	v.z *= ground->damping; // apply damping
+
+	slotParticle->v = Vector3d(v.x, v.y, v.z);
 }

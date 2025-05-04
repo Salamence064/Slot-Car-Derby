@@ -26,6 +26,8 @@ class Ground {
 
     public:
         float y; // y coordinate of the ground
+        float restitution; // restitution coefficient for the ground
+        float damping; // friction coefficient for the ground
 
         Ground();
         ~Ground();

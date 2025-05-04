@@ -39,7 +39,7 @@ public:
 	double getTime() const { return t; }
 	
 private:
-	static constexpr double maxCentripital = 10000.0; // maximum centripital force
+	static constexpr double maxCentripital = 0.0; // maximum centripital force
 
 	double t;
 	double h;
@@ -51,6 +51,17 @@ private:
 
 	std::shared_ptr<Particle> slotParticle;
 	std::shared_ptr<Ground> ground;
+
+	bool onGround = 0;
+	bool landed = 0;
+	bool offTrack = 0;
+
+	glm::vec3 orientation = glm::vec3(0.0f, 0.0f, 0.0f); // orientation of the car
+
+	bool groundIntersection();
+
+	// This function should only be called if the car is intersecting the ground
+	void handleGroundIntersection();
 };
 
 #endif
