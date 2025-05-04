@@ -12,6 +12,8 @@ To compile run the following commands:
 
 Track Number should range from 0 to 3.
 
+To move the car forward you can press 'w' or the up arrow, and to reverse the car, you can press 's' or the down arrow. If you wish to toggle the animation, press the space bar and you can reset the scene by pressing 'r'
+
 Tasks:
  1. ~~Create a circular track and draw it to the screen~~
  2. ~~Get a particle to move around the circular track like a slot car would (using 'a' and 'd' or left and right arrow)~~
@@ -24,4 +26,4 @@ Tasks:
  9. ~~If the car is moving too fast (i.e. its velocity is above a certain threshold on a turn), don't apply the constraint and let the car fall onto the ground~~
  10. ~~Add the bouncing effects of the car falling onto the ground -- basically, we will be adding collision to the ground~~
 
-ChatGPT provided me with the constraint equations for the CircularTrack. I also used GitHub Copilot to generate boilerplate code in some of the constructors and other functions. The constraint equation for the SplineTrack was created with help from Dr. Sueda.
+ChatGPT provided me with the constraint equations for the CircularTrack and provided assistence in constructing the orthonormal vectors for the rotation matrix used to align the car to always face forward. I also used GitHub Copilot to generate boilerplate code in some of the constructors and other functions. The constraint equation for the SplineTrack was created with help from Dr. Sueda.
