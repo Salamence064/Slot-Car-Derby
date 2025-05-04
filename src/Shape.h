@@ -18,10 +18,15 @@ class Program;
 class Shape
 {
 public:
+	float minX, maxX;
+	float minY, maxY;
+	float minZ, maxZ;
+
 	Shape();
 	virtual ~Shape();
 	void loadMesh(const std::string &meshName);
 	void init();
+	void computeMinMax();
 	void draw(const std::shared_ptr<Program> prog) const;
 	
 private:

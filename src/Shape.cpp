@@ -93,6 +93,24 @@ void Shape::init()
 	GLSL::checkError(GET_FILE_LINE);
 }
 
+void Shape::computeMinMax()
+{
+	minX = maxX = posBuf[0];
+	minY = maxY = posBuf[1];
+	minZ = maxZ = posBuf[2];
+	
+	for(size_t i=1; i<posBuf.size()/3; i++) {
+		if(posBuf[3*i+0] < minX) minX = posBuf[3*i+0];
+		if(posBuf[3*i+0] > maxX) maxX = posBuf[3*i+0];
+
+		if(posBuf[3*i+1] < minY) minY = posBuf[3*i+1];
+		if(posBuf[3*i+1] > maxY) maxY = posBuf[3*i+1];
+		
+		if(posBuf[3*i+2] < minZ) minZ = posBuf[3*i+2];
+		if(posBuf[3*i+2] > maxZ) maxZ = posBuf[3*i+2];
+	}
+}
+
 void Shape::draw(const shared_ptr<Program> prog) const
 {
 	GLSL::checkError(GET_FILE_LINE);

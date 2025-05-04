@@ -14,6 +14,7 @@ class Particle;
 class MatrixStack;
 class Program;
 class Shape;
+class Car;
 
 class Scene
 {
@@ -43,7 +44,9 @@ private:
 	
 	std::shared_ptr<Shape> sphereShape;
 	std::shared_ptr<Track> track;
-	std::shared_ptr<Particle> car;
+	std::shared_ptr<Car> car;
+
+	std::shared_ptr<Particle> slotParticle;
 };
 
 #endif

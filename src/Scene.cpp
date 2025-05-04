@@ -7,6 +7,7 @@
 #include "Particle.h"
 #include "Shape.h"
 #include "Program.h"
+#include "Car.h"
 
 using namespace std;
 using namespace Eigen;
@@ -31,10 +32,11 @@ void Scene::load(const string &RESOURCE_DIR)
 	
 	sphereShape = make_shared<Shape>();
 	sphereShape->loadMesh(RESOURCE_DIR + "sphere2.obj");
+	sphereShape->computeMinMax();
 	
 	track = make_shared<SplineTrack>(Vector3d(0.0, 0.0, 0.0), 1.0);
-
-	car = make_shared<Particle>(sphereShape);
+	slotParticle = make_shared<Particle>(sphereShape);
+	car = make_shared<Car>(RESOURCE_DIR, slotParticle);
 }
 
 void Scene::init()
@@ -53,26 +55,26 @@ void Scene::init()
 	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
 	
 	// initialize the car
-	car->r = 0.01;
-	car->m = 1.0;
-	car->d = 0.25;
-	car->x0 = Vector3d(0.0, 0.0, -1.0);
-	car->x = car->x0;
-	car->v0 = Vector3d(0.0, 0.0, 0.0);
-	car->v = car->v0;
-	car->fixed = false;
-	car->p = car->x0;
+	slotParticle->r = 0.01;
+	slotParticle->m = 1.0;
+	slotParticle->d = 0.25;
+	slotParticle->x0 = Vector3d(0.0, 0.0, -1.0);
+	slotParticle->x = slotParticle->x0;
+	slotParticle->v0 = Vector3d(0.0, 0.0, 0.0);
+	slotParticle->v = slotParticle->v0;
+	slotParticle->fixed = false;
+	slotParticle->p = slotParticle->x0;
 }
 
 void Scene::tare()
 {
-	car->tare();
+	slotParticle->tare();
 }
 
 void Scene::reset()
 {
 	t = 0.0;
-	car->reset();
+	slotParticle->reset();
 }
 
 void Scene::step()
@@ -81,38 +83,41 @@ void Scene::step()
 
 	// todo add gravity in the future when we are working with moving up and down (along the y-axis)
 	// update the car's position
-	Vector3d f = car->d * car->v;
-	car->v += (h / car->m) * f;
-	car->p = car->x;
-	car->x += h * car->v;
+	Vector3d f = slotParticle->d * slotParticle->v;
+	slotParticle->v += (h / slotParticle->m) * f;
+	slotParticle->p = slotParticle->x;
+	slotParticle->x += h * slotParticle->v;
 
 	// todo might need to add checks for if C or gradC are 0
 	// apply constraints to the car particle
-	double C = track->C(car->x);
-	Vector3d gradC = track->gradC(car->x);
+	double C = track->C(slotParticle->x);
+	Vector3d gradC = track->gradC(slotParticle->x);
 
-	double Cn = track->Cn(car->x);
-	Vector3d gradCn = track->gradCn(car->x);
+	double Cn = track->Cn(slotParticle->x);
+	Vector3d gradCn = track->gradCn(slotParticle->x);
 
-	double w = 1.0 / car->m;
+	double w = 1.0 / slotParticle->m;
 	double lambda = -C / (w * gradC.squaredNorm());
 	double lambdaN = -Cn / (w * gradCn.squaredNorm());
 
-	car->x += lambda  * w * gradC;
-	car->x += lambdaN * w * gradCn;
+	slotParticle->x += lambda  * w * gradC;
+	slotParticle->x += lambdaN * w * gradCn;
 
 	// update the car's velocity
-	car->v = (1 / h) * (car->x - car->p);
+	slotParticle->v = (1 / h) * (slotParticle->x - slotParticle->p);
+
+	Eigen::Vector3d forward = track->getForward(slotParticle->x);
+	car->align_car(glm::vec3(forward(0), forward(1), forward(2))); // todo the tangent vector isn't really the correct "forward" direction
 }
 
 void Scene::moveClockwise()
 { // todo we'll need to find better values for the speed
-	car->v += 0.1 * track->getForward(car->x);
+	slotParticle->v += 0.1 * track->getForward(slotParticle->x);
 }
 
 void Scene::moveCounterClockwise()
 { // todo we'll need to find better values for the speed
-	car->v += 0.1 * -track->getForward(car->x);
+	slotParticle->v += 0.1 * -track->getForward(slotParticle->x);
 }
 
 void Scene::draw(shared_ptr<MatrixStack> MV, const shared_ptr<Program> prog, const shared_ptr<Program> progSimple) const

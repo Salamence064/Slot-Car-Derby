@@ -138,14 +138,6 @@ double SplineTrack::Cn(Eigen::Vector3d x) const
     G[2] = glm::vec4(cps[index + 2], 0.0f);
     G[3] = glm::vec4(cps[index + 3], 0.0f);
 
-    // glm::vec4 uPrimeVec(0.0f, 1.0f, 2.0f*u, 3.0f*u*u);
-    // glm::vec3 tangent = glm::normalize(glm::vec3(G*B*uPrimeVec));
-
-    // // compute the normal vector
-    // glm::vec4 uDoublePrimeVec(0.0f, 0.0f, 2.0f, 6.0f*u);
-    // glm::vec3 pDoublePrime = glm::vec3(G*B*uDoublePrimeVec);
-    // glm::vec3 normal = glm::normalize(pDoublePrime - glm::dot(pDoublePrime, tangent) * tangent); // normal vector (perpendicular to the tangent vector)
-
     // compute the normal vector
     glm::vec3 normal = up; // initial normal (up direction)
 
@@ -204,48 +196,6 @@ Eigen::Vector3d SplineTrack::gradC(Eigen::Vector3d x) const
 
 Eigen::Vector3d SplineTrack::gradCn(Eigen::Vector3d x) const
 {
-    // glm::mat4 G;
-
-    // // find the closest point on the spline to the car's position
-    // float minDistSq = std::numeric_limits<float>::max();
-    // float u = 0.0f;
-    // int index = 0;
-
-    // for (int i = 0; i < (int) cps.size() - 3; ++i) {
-    //     G[0] = glm::vec4(cps[i],     0.0f);
-    //     G[1] = glm::vec4(cps[i + 1], 0.0f);
-    //     G[2] = glm::vec4(cps[i + 2], 0.0f);
-    //     G[3] = glm::vec4(cps[i + 3], 0.0f);
-
-    //     for (float uTemp = 0.01f; uTemp < 1.0f; uTemp += 0.01f) {
-    //         glm::vec4 uVec(1.0f, uTemp, uTemp*uTemp, uTemp*uTemp*uTemp);
-    //         glm::vec4 p = G*B*uVec;
-
-    //         float distSq = (x - Eigen::Vector3d(p.x, p.y, p.z)).squaredNorm();
-    //         if (distSq < minDistSq) {
-    //             minDistSq = distSq;
-    //             u = uTemp;
-    //             index = i;
-    //         }
-    //     }
-    // }
-
-    // // compute the tangent vector at the closest point on the spline
-    // G[0] = glm::vec4(cps[index],     0.0f);
-    // G[1] = glm::vec4(cps[index + 1], 0.0f);
-    // G[2] = glm::vec4(cps[index + 2], 0.0f);
-    // G[3] = glm::vec4(cps[index + 3], 0.0f);
-
-    // glm::vec4 uPrimeVec(0.0f, 1.0f, 2.0f*u, 3.0f*u*u);
-    // glm::vec3 tangent = glm::normalize(glm::vec3(G*B*uPrimeVec));
-
-    // // compute the normal vector
-    // glm::vec4 uDoublePrimeVec(0.0f, 0.0f, 2.0f, 6.0f*u);
-    // glm::vec3 pDoublePrime = glm::vec3(G*B*uDoublePrimeVec);
-    // glm::vec3 normal = glm::normalize(pDoublePrime - glm::dot(pDoublePrime, tangent) * tangent); // normal vector (perpendicular to the tangent vector)
-
-    // return Eigen::Vector3d(normal.x, normal.y, normal.z);
-
     return Eigen::Vector3d(up.x, up.y, up.z); // gradient of the constraint function (normal vector)
 }
 
