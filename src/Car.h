@@ -13,7 +13,7 @@
 
 class Car {
     private:
-        const glm::vec3 forward = glm::vec3(0.0f, 0.0f, 1.0f); // forward direction of the car
+        const glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f); // the up direction in the model
 
         std::shared_ptr<Shape> car;
         std::shared_ptr<Particle> slot; // particle representing the slot for the slot car

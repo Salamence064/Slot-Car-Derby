@@ -20,7 +20,10 @@ Car::Car(const std::string &resourceDir, std::shared_ptr<Particle> slotParticle)
     // Initialize translation and rotation
     translation = glm::vec3(0.0f, 0.0f, 0.0f);
     scale = 0.01f; // Scale down the car model
-    rot_offset = glm::quat(glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(-1.0f, 0.0f, 0.0f)));
+
+    glm::quat yaw90  = glm::angleAxis(glm::radians(-90.f), glm::vec3(0,1,0)); // Rotate 90 degrees around the y-axis
+    glm::quat tilt90 = glm::angleAxis(glm::radians(-90.f), glm::vec3(1,0,0)); // Rotate -90 degrees around the x-axis
+    rot_offset = yaw90 * tilt90; // Combine the rotations to make the car's vertical axis point up
     rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f); // Initialize rotation to identity
 }
 
@@ -28,8 +31,12 @@ Car::~Car() {
 }
 
 void Car::align_car(glm::vec3 const &dir) {
-    glm::vec3 d = glm::normalize(dir); // Normalize the direction vector
-    rotation = glm::rotation(forward, d); // Compute the rotation quaternion to align the car with the direction vector
+    glm::vec3 f = glm::normalize(dir); // Normalize the direction vector
+    glm::vec3 r = glm::normalize(glm::cross(up, f)); // Right vector
+    glm::vec3 u = glm::normalize(glm::cross(f, r)); // "True" up
+
+    glm::mat3 basis(r, u, f);
+    rotation = glm::quat_cast(basis); // Convert the basis matrix to a quaternion
 }
 
 
@@ -40,8 +47,8 @@ void Car::draw(std::shared_ptr<MatrixStack> MV, std::shared_ptr<Program> prog) c
     MV->pushMatrix();
 
         MV->translate(translation.x + slot->x(0), translation.y + slot->x(1), translation.z + slot->x(2)); // Translate to the car's position
-        MV->multMatrix(glm::mat4(rot_offset)); // Apply the rotation offset to make the model's vertical axis point up
-        MV->multMatrix(glm::mat4(rotation)); // Apply the rotation
+        glm::quat full_rot = rotation * rot_offset; // Combine the rotation with the offset
+        MV->multMatrix(glm::mat4(full_rot)); // Apply the rotation
         MV->scale(scale); // Scale the car
 
         glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));

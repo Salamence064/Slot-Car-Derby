@@ -64,6 +64,13 @@ void Scene::init()
 	slotParticle->v = slotParticle->v0;
 	slotParticle->fixed = false;
 	slotParticle->p = slotParticle->x0;
+
+	// finish initializing the track by calling the constraint function to get the cached values
+	track->C(slotParticle->x);
+
+	// orient the car to face the direction of the track
+	Eigen::Vector3d forward = track->getForward(slotParticle->x);
+	car->align_car(glm::vec3(forward(0), forward(1), forward(2)));
 }
 
 void Scene::tare()
@@ -109,7 +116,7 @@ void Scene::step()
 	slotParticle->v = (1 / h) * (slotParticle->x - slotParticle->p);
 
 	Eigen::Vector3d forward = track->getForward(slotParticle->x);
-	car->align_car(glm::vec3(forward(0), forward(1), forward(2))); // todo the tangent vector isn't really the correct "forward" direction
+	car->align_car(glm::vec3(forward(0), forward(1), forward(2)));
 }
 
 void Scene::moveClockwise()
