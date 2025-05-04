@@ -18,4 +18,5 @@ class CircularTrack : public Track {
         virtual Eigen::Vector3d gradCn(Eigen::Vector3d x) const override;
 
         virtual Eigen::Vector3d getForward(Eigen::Vector3d x) const override; // get the forward direction of the track at a given point
+        virtual double getCurvature(Eigen::Vector3d x) const override; // curvature is not applicable for circular track
 };

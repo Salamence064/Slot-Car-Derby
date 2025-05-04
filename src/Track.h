@@ -41,6 +41,7 @@ class Track {
         virtual Eigen::Vector3d gradCn(Eigen::Vector3d x) const = 0; // gradient of the constraint function (normal)
         
         virtual Eigen::Vector3d getForward(Eigen::Vector3d x) const = 0; // get the forward direction of the track at a given point
+        virtual double getCurvature(Eigen::Vector3d x) const = 0; // get the curvature of the track at a given point
 
         inline Eigen::Vector3d getPos() const { return pos; }
         inline float getScale() const { return scale; }

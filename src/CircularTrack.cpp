@@ -60,3 +60,7 @@ Eigen::Vector3d CircularTrack::getForward(Eigen::Vector3d x) const {
     // calculate the forward direction based on the angle
     return Eigen::Vector3d(-sin(theta), 0.0, cos(theta)); // forward direction is tangent to the circle at point x
 }
+
+double CircularTrack::getCurvature(Eigen::Vector3d x) const {
+    return 1.0 / r; // curvature of a circle is constant and equal to the reciprocal of the radius
+}

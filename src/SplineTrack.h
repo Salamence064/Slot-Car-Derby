@@ -4,6 +4,9 @@
 
 #include "Track.h"
 
+// todo the glitchy behavior at the start/end of the track is probs due to improper wrapping
+// todo this could also be why it slows down so much at that point, too
+
 class SplineTrack : public Track
 {
     private:
@@ -26,4 +29,5 @@ class SplineTrack : public Track
         virtual Eigen::Vector3d gradCn(Eigen::Vector3d x) const override; // gradient of the constraint function (normal)
 
         virtual Eigen::Vector3d getForward(Eigen::Vector3d x) const override; // get the forward direction of the track at a given point
+        virtual double getCurvature(Eigen::Vector3d x) const override; // get the curvature of the track at a given point
 };

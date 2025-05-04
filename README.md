@@ -19,7 +19,7 @@ Tasks:
  6. ~~Draw a car model at the appropriate positions given the two slot particles~~
  7. Add a bounding box of particles with springs connecting them to the car model to allow the car model to naturally sway
  8. ~~Add a ground beneath the track~~
- 9. If the car is moving too fast (i.e. its velocity is above a certain threshold on a turn), don't apply the constraint and let the car fall onto the ground
+ 9. ~~If the car is moving too fast (i.e. its velocity is above a certain threshold on a turn), don't apply the constraint and let the car fall onto the ground~~
  10. Add the bouncing effects of the car falling onto the ground -- basically, we will be adding collision to the ground
  11. (Maybe) add a model for the track to make it look nicer
 

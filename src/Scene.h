@@ -39,6 +39,8 @@ public:
 	double getTime() const { return t; }
 	
 private:
+	static constexpr double maxCentripital = 10000.0; // maximum centripital force
+
 	double t;
 	double h;
 	Eigen::Vector3d grav;

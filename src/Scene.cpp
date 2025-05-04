@@ -86,7 +86,7 @@ void Scene::step()
 
 	// todo add gravity in the future when we are working with moving up and down (along the y-axis)
 	// update the car's position
-	Vector3d f = slotParticle->d * slotParticle->v;
+	Vector3d f = slotParticle->m * grav - slotParticle->d * slotParticle->v;
 	slotParticle->v += (h / slotParticle->m) * f;
 	slotParticle->p = slotParticle->x;
 	slotParticle->x += h * slotParticle->v;
@@ -103,24 +103,27 @@ void Scene::step()
 	double lambda = -C / (w * gradC.squaredNorm());
 	double lambdaN = -Cn / (w * gradCn.squaredNorm());
 
-	slotParticle->x += lambda  * w * gradC;
-	slotParticle->x += lambdaN * w * gradCn;
+	// if the car goes too fast, don't apply the constraint and let it fall to the ground
+	if (slotParticle->v.squaredNorm() * track->getCurvature(slotParticle->x) <= maxCentripital) {
+		slotParticle->x += lambda  * w * gradC;
+		slotParticle->x += lambdaN * w * gradCn;
+	}
 
 	// update the car's velocity
 	slotParticle->v = (1 / h) * (slotParticle->x - slotParticle->p);
 
-	Eigen::Vector3d forward = track->getForward(slotParticle->x);
-	car->align_car(glm::vec3(forward(0), forward(1), forward(2))); // todo the tangent vector isn't really the correct "forward" direction
+	// Eigen::Vector3d forward = track->getForward(slotParticle->x);
+	// car->align_car(glm::vec3(forward(0), forward(1), forward(2))); // todo the tangent vector isn't really the correct "forward" direction
 }
 
 void Scene::moveClockwise()
 { // todo we'll need to find better values for the speed
-	slotParticle->v += 0.1 * track->getForward(slotParticle->x);
+	slotParticle->v += track->getForward(slotParticle->x);
 }
 
 void Scene::moveCounterClockwise()
 { // todo we'll need to find better values for the speed
-	slotParticle->v += 0.1 * -track->getForward(slotParticle->x);
+	slotParticle->v += -track->getForward(slotParticle->x);
 }
 
 void Scene::draw(shared_ptr<MatrixStack> MV, const shared_ptr<Program> prog, const shared_ptr<Program> progSimple) const
