@@ -8,7 +8,9 @@ To compile run the following commands:
 * `cd build`
 * `cmake ..`
 * `make -j4`
-* `./SlotCar ../resources`
+* `./SlotCar <Resource Directory> <Track Number>`
+
+Track Number should range from 0 to 3.
 
 Tasks:
  1. ~~Create a circular track and draw it to the screen~~

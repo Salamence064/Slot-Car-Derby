@@ -35,30 +35,75 @@ void Scene::load(const string &RESOURCE_DIR)
 	sphereShape->loadMesh(RESOURCE_DIR + "sphere2.obj");
 	sphereShape->computeMinMax();
 	
-	track = make_shared<SplineTrack>(Vector3d(0.0, 0.0, 0.0), 1.0);
+	auto track1 = make_shared<SplineTrack>(Vector3d(0.0, 0.0, 0.0), 1.0);
+	auto track2 = make_shared<SplineTrack>(Vector3d(0.0, 0.0, 0.0), 1.0);
+	auto track3 = make_shared<SplineTrack>(Vector3d(0.0, 0.0, 0.0), 1.0);
+	auto track4 = make_shared<SplineTrack>(Vector3d(0.0, 0.0, 0.0), 1.0);
+
+	tracks.push_back(track1);
+	tracks.push_back(track2);
+	tracks.push_back(track3);
+	tracks.push_back(track4);
+
+	track = track1;
 	slotParticle = make_shared<Particle>(sphereShape);
 	car = make_shared<Car>(RESOURCE_DIR, slotParticle);
 	ground = make_shared<Ground>();
 }
 
-void Scene::init()
+void Scene::init(int track_number)
 {
 	sphereShape->init();
 	ground->init();
 
-	// initialize the track by adding control points
-	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
-	track->addControlPoint(glm::vec3(0.0, 0.0, 1.0));
-	track->addControlPoint(glm::vec3(-2.0, 0.0, 0.0));
-	track->addControlPoint(glm::vec3(-1.0, 1.0, 0.0));
-	track->addControlPoint(glm::vec3(0.0, 0.0, -1.0));
-	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
+	// todo create multiple tracks I could use for demonstration purposes
+	// todo we could pass a commandline argument to select the track
+
+	// initialize the tracks
+	tracks[0]->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
+	tracks[0]->addControlPoint(glm::vec3(0.0, 0.0, 1.0));
+	tracks[0]->addControlPoint(glm::vec3(-2.0, 0.0, 0.0));
+	tracks[0]->addControlPoint(glm::vec3(-1.0, 1.0, 0.0));
+	tracks[0]->addControlPoint(glm::vec3(0.0, 0.0, -1.0));
+	tracks[0]->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
+
+	tracks[1]->addControlPoint(glm::vec3(0.0, 2.0, 0.0));
+	tracks[1]->addControlPoint(glm::vec3(0.0, 1.0, 1.0));
+	tracks[1]->addControlPoint(glm::vec3(-0.5, 0.0, 2.0));
+	tracks[1]->addControlPoint(glm::vec3(-1.5, -0.5, 1.0));
+	tracks[1]->addControlPoint(glm::vec3(-2.0, 0.0, 0.0));
+	tracks[1]->addControlPoint(glm::vec3(-1.0, 1.5, 0.0));
+	tracks[1]->addControlPoint(glm::vec3(0.0, 2.0, 0.0));
+
+	tracks[2]->addControlPoint(glm::vec3(0.0, 1.0, -1.0));
+	tracks[2]->addControlPoint(glm::vec3(0.5, 0.5, -0.5));
+	tracks[2]->addControlPoint(glm::vec3(0.0, 1.0, 0.0));
+	tracks[2]->addControlPoint(glm::vec3(0.0, 1.0, 1.0));
+	tracks[2]->addControlPoint(glm::vec3(-1.0, 0.5, 2.0));
+	tracks[2]->addControlPoint(glm::vec3(1.0, 0.0, -1.0));
+	tracks[2]->addControlPoint(glm::vec3(0.5, 0.5, -1.0));
+	tracks[2]->addControlPoint(glm::vec3(0.0, 1.0, -1.0));
+
+	tracks[3]->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
+	tracks[3]->addControlPoint(glm::vec3(0.0, 0.0, 1.0));
+	tracks[3]->addControlPoint(glm::vec3(-2.0, 0.0, 0.0));
+	tracks[3]->addControlPoint(glm::vec3(-1.0, 0.0, 0.0));
+	tracks[3]->addControlPoint(glm::vec3(0.0, 0.0, -1.0));
+	tracks[3]->addControlPoint(glm::vec3(0.0, 0.0, -2.0));
+	tracks[3]->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
 	
+	track = tracks[track_number];
+
+	startingPoints.push_back(Eigen::Vector3d(0.0, 0.0, -1.0));
+	startingPoints.push_back(Eigen::Vector3d(0.0, 2.0, 0.0));
+	startingPoints.push_back(Eigen::Vector3d(0.0, 1.0, -1.0));
+	startingPoints.push_back(Eigen::Vector3d(0.0, 0.0, -1.0));
+
 	// initialize the car
 	slotParticle->r = 0.01;
 	slotParticle->m = 1.0;
 	slotParticle->d = 0.25;
-	slotParticle->x0 = Vector3d(0.0, 0.0, -1.0);
+	slotParticle->x0 = startingPoints[track_number];
 	slotParticle->x = slotParticle->x0;
 	slotParticle->v0 = Vector3d(0.0, 0.0, 0.0);
 	slotParticle->v = slotParticle->v0;
@@ -80,6 +125,15 @@ void Scene::reset()
 {
 	t = 0.0;
 	slotParticle->reset();
+
+	onGround = 0;
+	landed = 0;
+	offTrack = 0;
+
+	// orient the car to face the direction of the track
+	Eigen::Vector3d forward = track->getForward(slotParticle->x);
+	car->align_car(glm::vec3(forward(0), forward(1), forward(2)));
+	orientation = glm::vec3(forward(0), forward(1), forward(2));
 }
 
 void Scene::step()

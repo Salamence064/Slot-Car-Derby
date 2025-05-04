@@ -26,7 +26,7 @@ public:
 	virtual ~Scene();
 	
 	void load(const std::string &RESOURCE_DIR);
-	void init();
+	void init(int track_number);
 	void tare();
 	void reset();
 	void step();
@@ -39,12 +39,15 @@ public:
 	double getTime() const { return t; }
 	
 private:
-	static constexpr double maxCentripital = 10000.0; // maximum centripital force
+	static constexpr double maxCentripital = 25000.0; // maximum centripital force
 
 	double t;
 	double h;
 	Eigen::Vector3d grav;
 	
+	std::vector<std::shared_ptr<Track> > tracks;
+	std::vector<Eigen::Vector3d> startingPoints;
+
 	std::shared_ptr<Shape> sphereShape;
 	std::shared_ptr<Track> track;
 	std::shared_ptr<Car> car;

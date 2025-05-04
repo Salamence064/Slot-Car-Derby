@@ -35,6 +35,8 @@ bool keyToggles[256] = {false}; // only for English keyboards!
 GLFWwindow *window; // Main application window
 string RESOURCE_DIR = ""; // Where the resources are loaded from
 
+int track_number = 0; // Track number to load
+
 shared_ptr<Camera> camera;
 shared_ptr<Program> prog;
 shared_ptr<Program> progSimple;
@@ -139,7 +141,7 @@ static void init()
 	scene = make_shared<Scene>();
 	scene->load(RESOURCE_DIR);
 	scene->tare();
-	scene->init();
+	scene->init(track_number);
 	
 	// If there were any OpenGL errors, this will print something.
 	// You can intersperse this line in your code to find the exact location
@@ -233,11 +235,12 @@ void stepperFunc()
 
 int main(int argc, char **argv)
 {
-	if(argc < 2) {
-		cout << "Please specify the resource directory." << endl;
+	if(argc < 3) {
+		cout << "Please specify the resource directory and the track number." << endl;
 		return 0;
 	}
 	RESOURCE_DIR = argv[1] + string("/");
+	track_number = atoi(argv[2]);
 	
 	// Set error callback.
 	glfwSetErrorCallback(error_callback);
