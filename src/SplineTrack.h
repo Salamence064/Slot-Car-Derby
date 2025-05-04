@@ -15,11 +15,13 @@ class SplineTrack : public Track
         std::vector<glm::vec3> cps; // control points
         glm::mat4 B; // basis matrix for catmull-rom spline
 
+        int ncps; // number of control points
+
     public:
         SplineTrack(Eigen::Vector3d pos, float scale);
         ~SplineTrack() {}
 
-        virtual void addControlPoint(const glm::vec3& cp) override { cps.push_back(cp); } // add a control point
+        virtual void addControlPoint(const glm::vec3& cp) override { cps.push_back(cp); ++ncps; } // add a control point
 
         virtual void draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog) const override;
 

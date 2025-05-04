@@ -46,15 +46,12 @@ void Scene::init()
 	sphereShape->init();
 	ground->init();
 
-	// ! Remember to duplicate the starting and ending control points
 	// initialize the track by adding control points
-	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
 	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
 	track->addControlPoint(glm::vec3(0.0, 0.0, 1.0));
 	track->addControlPoint(glm::vec3(-2.0, 0.0, 0.0));
 	track->addControlPoint(glm::vec3(-1.0, 1.0, 0.0));
 	track->addControlPoint(glm::vec3(0.0, 0.0, -1.0));
-	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
 	track->addControlPoint(glm::vec3(1.0, 0.0, 0.0));
 	
 	// initialize the car
@@ -84,7 +81,6 @@ void Scene::step()
 {
 	t += h;
 
-	// todo add gravity in the future when we are working with moving up and down (along the y-axis)
 	// update the car's position
 	Vector3d f = slotParticle->m * grav - slotParticle->d * slotParticle->v;
 	slotParticle->v += (h / slotParticle->m) * f;
@@ -112,8 +108,8 @@ void Scene::step()
 	// update the car's velocity
 	slotParticle->v = (1 / h) * (slotParticle->x - slotParticle->p);
 
-	// Eigen::Vector3d forward = track->getForward(slotParticle->x);
-	// car->align_car(glm::vec3(forward(0), forward(1), forward(2))); // todo the tangent vector isn't really the correct "forward" direction
+	Eigen::Vector3d forward = track->getForward(slotParticle->x);
+	car->align_car(glm::vec3(forward(0), forward(1), forward(2))); // todo the tangent vector isn't really the correct "forward" direction
 }
 
 void Scene::moveClockwise()

@@ -18,6 +18,9 @@ SplineTrack::SplineTrack(Eigen::Vector3d pos, float scale) : Track()
     B[2] = glm::vec4(1.0f, -2.5f, 2.0f, -0.5f);
     B[1] = glm::vec4(-0.5f, 0, 0.5f, 0);
     B[0] = glm::vec4(0, 1.0f, 0, 0);
+
+    ncps = 0; // number of control points
+    cps = std::vector<glm::vec3>(); // control points
 }
 
 void SplineTrack::draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog) const
@@ -34,7 +37,7 @@ void SplineTrack::draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Pr
 
         glBegin(GL_LINE_STRIP);
 
-        for (int i = 0; i < (int) cps.size() - 3; ++i) {
+        for (int i = 0; i < ncps - 3; ++i) {
             glm::mat4 G;
             G[0] = glm::vec4(cps[i],     0.0f);
             G[1] = glm::vec4(cps[i + 1], 0.0f);
@@ -62,7 +65,7 @@ double SplineTrack::C(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < (int) cps.size() - 3; ++i) {
+    for (int i = 0; i < ncps - 3; ++i) {
         G[0] = glm::vec4(cps[i],     0.0f);
         G[1] = glm::vec4(cps[i + 1], 0.0f);
         G[2] = glm::vec4(cps[i + 2], 0.0f);
@@ -112,7 +115,7 @@ double SplineTrack::Cn(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < (int) cps.size() - 3; ++i) {
+    for (int i = 0; i < ncps - 3; ++i) {
         G[0] = glm::vec4(cps[i],     0.0f);
         G[1] = glm::vec4(cps[i + 1], 0.0f);
         G[2] = glm::vec4(cps[i + 2], 0.0f);
@@ -158,7 +161,7 @@ Eigen::Vector3d SplineTrack::gradC(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < (int) cps.size() - 3; ++i) {
+    for (int i = 0; i < ncps - 3; ++i) {
         G[0] = glm::vec4(cps[i],     0.0f);
         G[1] = glm::vec4(cps[i + 1], 0.0f);
         G[2] = glm::vec4(cps[i + 2], 0.0f);
@@ -207,7 +210,7 @@ Eigen::Vector3d SplineTrack::getForward(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < (int) cps.size() - 3; ++i) {
+    for (int i = 0; i < ncps - 3; ++i) {
         G[0] = glm::vec4(cps[i],     0.0f);
         G[1] = glm::vec4(cps[i + 1], 0.0f);
         G[2] = glm::vec4(cps[i + 2], 0.0f);
@@ -247,7 +250,7 @@ double SplineTrack::getCurvature(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < (int) cps.size() - 3; ++i) {
+    for (int i = 0; i < ncps - 3; ++i) {
         G[0] = glm::vec4(cps[i],     0.0f);
         G[1] = glm::vec4(cps[i + 1], 0.0f);
         G[2] = glm::vec4(cps[i + 2], 0.0f);
