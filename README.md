@@ -12,7 +12,7 @@ To compile run the following commands:
 
 Track Number should range from 0 to 3.
 
-To move the car forward you can press 'w' or the up arrow, and to reverse the car, you can press 's' or the down arrow. If you wish to toggle the animation, press the space bar and you can reset the scene by pressing 'r'
+To move the car forward you can press 'w' or the up arrow, and to reverse the car, you can press 's' or the down arrow. If you wish to toggle the animation, press the space bar and you can reset the scene by pressing 'r'. Finally, you can make the car free fall by pressing 'f'.
 
 Tasks:
  1. ~~Create a circular track and draw it to the screen~~

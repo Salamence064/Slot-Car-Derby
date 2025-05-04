@@ -33,6 +33,8 @@ public:
 
 	void moveForward();
 	void moveBackward();
+
+	inline void free_fall() { offTrack = 1; }
 	
 	void draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Program> prog, const std::shared_ptr<Program> progSimple) const;
 	
