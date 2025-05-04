@@ -37,12 +37,17 @@ void SplineTrack::draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Pr
 
         glBegin(GL_LINE_STRIP);
 
-        for (int i = 0; i < ncps - 3; ++i) {
+        for (int i = 0; i < ncps; ++i) {
+            int im1 = (i - 1 + ncps) % ncps; // previous control point index
+            int ip0 = i;                     // current control point index
+            int ip1 = (i + 1) % ncps;        // next control point index
+            int ip2 = (i + 2) % ncps;        // next next control point index
+
             glm::mat4 G;
-            G[0] = glm::vec4(cps[i],     0.0f);
-            G[1] = glm::vec4(cps[i + 1], 0.0f);
-            G[2] = glm::vec4(cps[i + 2], 0.0f);
-            G[3] = glm::vec4(cps[i + 3], 0.0f);
+            G[0] = glm::vec4(cps[im1], 0.0f);
+            G[1] = glm::vec4(cps[ip0], 0.0f);
+            G[2] = glm::vec4(cps[ip1], 0.0f);
+            G[3] = glm::vec4(cps[ip2], 0.0f);
 
             for (float u = 0.01f; u < 1.0f; u += 0.01f) {
                 glm::vec4 uVec(1.0f, u, u*u, u*u*u);
@@ -65,11 +70,17 @@ double SplineTrack::C(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < ncps - 3; ++i) {
-        G[0] = glm::vec4(cps[i],     0.0f);
-        G[1] = glm::vec4(cps[i + 1], 0.0f);
-        G[2] = glm::vec4(cps[i + 2], 0.0f);
-        G[3] = glm::vec4(cps[i + 3], 0.0f);
+    for (int i = 0; i < ncps; ++i) {
+        int im1 = (i - 1 + ncps) % ncps; // previous control point index
+        int ip0 = i;                     // current control point index
+        int ip1 = (i + 1) % ncps;        // next control point index
+        int ip2 = (i + 2) % ncps;        // next next control point index
+
+        glm::mat4 G;
+        G[0] = glm::vec4(cps[im1], 0.0f);
+        G[1] = glm::vec4(cps[ip0], 0.0f);
+        G[2] = glm::vec4(cps[ip1], 0.0f);
+        G[3] = glm::vec4(cps[ip2], 0.0f);
 
         for (float uTemp = 0.01f; uTemp < 1.0f; uTemp += 0.01f) {
             glm::vec4 uVec(1.0f, uTemp, uTemp*uTemp, uTemp*uTemp*uTemp);
@@ -85,10 +96,15 @@ double SplineTrack::C(Eigen::Vector3d x) const
     }
 
     // compute the tangent vector at the closest point on the spline
-    G[0] = glm::vec4(cps[index],     0.0f);
-    G[1] = glm::vec4(cps[index + 1], 0.0f);
-    G[2] = glm::vec4(cps[index + 2], 0.0f);
-    G[3] = glm::vec4(cps[index + 3], 0.0f);
+    int im1 = (index - 1 + ncps) % ncps; // previous control point index
+    int ip0 = index;                     // current control point index
+    int ip1 = (index + 1) % ncps;        // next control point index
+    int ip2 = (index + 2) % ncps;        // next next control point index
+
+    G[0] = glm::vec4(cps[im1], 0.0f);
+    G[1] = glm::vec4(cps[ip0], 0.0f);
+    G[2] = glm::vec4(cps[ip1], 0.0f);
+    G[3] = glm::vec4(cps[ip2], 0.0f);
 
     glm::vec4 uPrimeVec(0.0f, 1.0f, 2.0f*u, 3.0f*u*u);
     glm::vec3 tangent = glm::normalize(glm::vec3(G*B*uPrimeVec));
@@ -115,11 +131,17 @@ double SplineTrack::Cn(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < ncps - 3; ++i) {
-        G[0] = glm::vec4(cps[i],     0.0f);
-        G[1] = glm::vec4(cps[i + 1], 0.0f);
-        G[2] = glm::vec4(cps[i + 2], 0.0f);
-        G[3] = glm::vec4(cps[i + 3], 0.0f);
+    for (int i = 0; i < ncps; ++i) {
+        int im1 = (i - 1 + ncps) % ncps; // previous control point index
+        int ip0 = i;                     // current control point index
+        int ip1 = (i + 1) % ncps;        // next control point index
+        int ip2 = (i + 2) % ncps;        // next next control point index
+
+        glm::mat4 G;
+        G[0] = glm::vec4(cps[im1], 0.0f);
+        G[1] = glm::vec4(cps[ip0], 0.0f);
+        G[2] = glm::vec4(cps[ip1], 0.0f);
+        G[3] = glm::vec4(cps[ip2], 0.0f);
 
         for (float uTemp = 0.01f; uTemp < 1.0f; uTemp += 0.01f) {
             glm::vec4 uVec(1.0f, uTemp, uTemp*uTemp, uTemp*uTemp*uTemp);
@@ -135,10 +157,15 @@ double SplineTrack::Cn(Eigen::Vector3d x) const
     }
 
     // compute the tangent vector at the closest point on the spline
-    G[0] = glm::vec4(cps[index],     0.0f);
-    G[1] = glm::vec4(cps[index + 1], 0.0f);
-    G[2] = glm::vec4(cps[index + 2], 0.0f);
-    G[3] = glm::vec4(cps[index + 3], 0.0f);
+    int im1 = (index - 1 + ncps) % ncps; // previous control point index
+    int ip0 = index;                     // current control point index
+    int ip1 = (index + 1) % ncps;        // next control point index
+    int ip2 = (index + 2) % ncps;        // next next control point index
+
+    G[0] = glm::vec4(cps[im1], 0.0f);
+    G[1] = glm::vec4(cps[ip0], 0.0f);
+    G[2] = glm::vec4(cps[ip1], 0.0f);
+    G[3] = glm::vec4(cps[ip2], 0.0f);
 
     // compute the normal vector
     glm::vec3 normal = up; // initial normal (up direction)
@@ -161,11 +188,17 @@ Eigen::Vector3d SplineTrack::gradC(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < ncps - 3; ++i) {
-        G[0] = glm::vec4(cps[i],     0.0f);
-        G[1] = glm::vec4(cps[i + 1], 0.0f);
-        G[2] = glm::vec4(cps[i + 2], 0.0f);
-        G[3] = glm::vec4(cps[i + 3], 0.0f);
+    for (int i = 0; i < ncps; ++i) {
+        int im1 = (i - 1 + ncps) % ncps; // previous control point index
+        int ip0 = i;                     // current control point index
+        int ip1 = (i + 1) % ncps;        // next control point index
+        int ip2 = (i + 2) % ncps;        // next next control point index
+
+        glm::mat4 G;
+        G[0] = glm::vec4(cps[im1], 0.0f);
+        G[1] = glm::vec4(cps[ip0], 0.0f);
+        G[2] = glm::vec4(cps[ip1], 0.0f);
+        G[3] = glm::vec4(cps[ip2], 0.0f);
 
         for (float uTemp = 0.01f; uTemp < 1.0f; uTemp += 0.01f) {
             glm::vec4 uVec(1.0f, uTemp, uTemp*uTemp, uTemp*uTemp*uTemp);
@@ -181,10 +214,15 @@ Eigen::Vector3d SplineTrack::gradC(Eigen::Vector3d x) const
     }
 
     // compute the tangent vector at the closest point on the spline
-    G[0] = glm::vec4(cps[index],     0.0f);
-    G[1] = glm::vec4(cps[index + 1], 0.0f);
-    G[2] = glm::vec4(cps[index + 2], 0.0f);
-    G[3] = glm::vec4(cps[index + 3], 0.0f);
+    int im1 = (index - 1 + ncps) % ncps; // previous control point index
+    int ip0 = index;                     // current control point index
+    int ip1 = (index + 1) % ncps;        // next control point index
+    int ip2 = (index + 2) % ncps;        // next next control point index
+
+    G[0] = glm::vec4(cps[im1], 0.0f);
+    G[1] = glm::vec4(cps[ip0], 0.0f);
+    G[2] = glm::vec4(cps[ip1], 0.0f);
+    G[3] = glm::vec4(cps[ip2], 0.0f);
 
     glm::vec4 uPrimeVec(0.0f, 1.0f, 2.0f*u, 3.0f*u*u);
     glm::vec3 tangent = glm::normalize(glm::vec3(G*B*uPrimeVec));
@@ -210,11 +248,17 @@ Eigen::Vector3d SplineTrack::getForward(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < ncps - 3; ++i) {
-        G[0] = glm::vec4(cps[i],     0.0f);
-        G[1] = glm::vec4(cps[i + 1], 0.0f);
-        G[2] = glm::vec4(cps[i + 2], 0.0f);
-        G[3] = glm::vec4(cps[i + 3], 0.0f);
+    for (int i = 0; i < ncps; ++i) {
+        int im1 = (i - 1 + ncps) % ncps; // previous control point index
+        int ip0 = i;                     // current control point index
+        int ip1 = (i + 1) % ncps;        // next control point index
+        int ip2 = (i + 2) % ncps;        // next next control point index
+
+        glm::mat4 G;
+        G[0] = glm::vec4(cps[im1], 0.0f);
+        G[1] = glm::vec4(cps[ip0], 0.0f);
+        G[2] = glm::vec4(cps[ip1], 0.0f);
+        G[3] = glm::vec4(cps[ip2], 0.0f);
 
         for (float uTemp = 0.01f; uTemp < 1.0f; uTemp += 0.01f) {
             glm::vec4 uVec(1.0f, uTemp, uTemp*uTemp, uTemp*uTemp*uTemp);
@@ -230,10 +274,15 @@ Eigen::Vector3d SplineTrack::getForward(Eigen::Vector3d x) const
     }
 
     // compute the tangent vector at the closest point on the spline
-    G[0] = glm::vec4(cps[index],     0.0f);
-    G[1] = glm::vec4(cps[index + 1], 0.0f);
-    G[2] = glm::vec4(cps[index + 2], 0.0f);
-    G[3] = glm::vec4(cps[index + 3], 0.0f);
+    int im1 = (index - 1 + ncps) % ncps; // previous control point index
+    int ip0 = index;                     // current control point index
+    int ip1 = (index + 1) % ncps;        // next control point index
+    int ip2 = (index + 2) % ncps;        // next next control point index
+
+    G[0] = glm::vec4(cps[im1], 0.0f);
+    G[1] = glm::vec4(cps[ip0], 0.0f);
+    G[2] = glm::vec4(cps[ip1], 0.0f);
+    G[3] = glm::vec4(cps[ip2], 0.0f);
 
     glm::vec4 uPrimeVec(0.0f, 1.0f, 2.0f*u, 3.0f*u*u);
     glm::vec3 tangent = glm::normalize(glm::vec3(G*B*uPrimeVec));
@@ -250,11 +299,17 @@ double SplineTrack::getCurvature(Eigen::Vector3d x) const
     float u = 0.0f;
     int index = 0;
 
-    for (int i = 0; i < ncps - 3; ++i) {
-        G[0] = glm::vec4(cps[i],     0.0f);
-        G[1] = glm::vec4(cps[i + 1], 0.0f);
-        G[2] = glm::vec4(cps[i + 2], 0.0f);
-        G[3] = glm::vec4(cps[i + 3], 0.0f);
+    for (int i = 0; i < ncps; ++i) {
+        int im1 = (i - 1 + ncps) % ncps; // previous control point index
+        int ip0 = i;                     // current control point index
+        int ip1 = (i + 1) % ncps;        // next control point index
+        int ip2 = (i + 2) % ncps;        // next next control point index
+
+        glm::mat4 G;
+        G[0] = glm::vec4(cps[im1], 0.0f);
+        G[1] = glm::vec4(cps[ip0], 0.0f);
+        G[2] = glm::vec4(cps[ip1], 0.0f);
+        G[3] = glm::vec4(cps[ip2], 0.0f);
 
         for (float uTemp = 0.01f; uTemp < 1.0f; uTemp += 0.01f) {
             glm::vec4 uVec(1.0f, uTemp, uTemp*uTemp, uTemp*uTemp*uTemp);
@@ -270,10 +325,15 @@ double SplineTrack::getCurvature(Eigen::Vector3d x) const
     }
 
     // compute the tangent vector at the closest point on the spline
-    G[0] = glm::vec4(cps[index],     0.0f);
-    G[1] = glm::vec4(cps[index + 1], 0.0f);
-    G[2] = glm::vec4(cps[index + 2], 0.0f);
-    G[3] = glm::vec4(cps[index + 3], 0.0f);
+    int im1 = (index - 1 + ncps) % ncps; // previous control point index
+    int ip0 = index;                     // current control point index
+    int ip1 = (index + 1) % ncps;        // next control point index
+    int ip2 = (index + 2) % ncps;        // next next control point index
+
+    G[0] = glm::vec4(cps[im1], 0.0f);
+    G[1] = glm::vec4(cps[ip0], 0.0f);
+    G[2] = glm::vec4(cps[ip1], 0.0f);
+    G[3] = glm::vec4(cps[ip2], 0.0f);
 
     // first derivative
     glm::vec4 uPrimeVec(0.0f, 1.0f, 2.0f*u, 3.0f*u*u);
