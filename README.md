@@ -16,12 +16,11 @@ Tasks:
  3. ~~Model the track using a spline instead and draw it to the screen~~
  4. ~~Get the particle to move around the spline track like a slot car would~~
  5. ~~Facilitate movement both up and down~~
- 6. Update to use 2 particles on the track to represent the slots for the car on the track
- 7. Draw a car model at the appropriate positions given the two slot particles
- 8. Add a bounding box of particles with springs connecting them to the car model to allow the car model to naturally sway
- 9.  Add a ground beneath the track
- 10. If the car is moving too fast (i.e. its velocity is above a certain threshold on a turn), don't apply the constraint and let the car fall onto the ground
- 11. Add the bouncing effects of the car falling onto the ground
- 12. (Maybe) add a model for the track to make it look nicer
+ 6. ~~Draw a car model at the appropriate positions given the two slot particles~~
+ 7. Add a bounding box of particles with springs connecting them to the car model to allow the car model to naturally sway
+ 8. ~~Add a ground beneath the track~~
+ 9. If the car is moving too fast (i.e. its velocity is above a certain threshold on a turn), don't apply the constraint and let the car fall onto the ground
+ 10. Add the bouncing effects of the car falling onto the ground -- basically, we will be adding collision to the ground
+ 11. (Maybe) add a model for the track to make it look nicer
 
 ChatGPT provided me with the constraint equations for the CircularTrack. I also used GitHub Copilot to generate boilerplate code in some of the constructors and other functions. The constraint equation for the SplineTrack was created with help from Dr. Sueda.

@@ -30,6 +30,7 @@ void SplineTrack::draw(std::shared_ptr<MatrixStack> MV, const std::shared_ptr<Pr
         glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
 
         glLineWidth(1.0f);
+        glColor3f(0.4f, 0.4f, 0.4f);
 
         glBegin(GL_LINE_STRIP);
 

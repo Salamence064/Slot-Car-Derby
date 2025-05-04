@@ -8,6 +8,7 @@
 #include "Shape.h"
 #include "Program.h"
 #include "Car.h"
+#include "ground.h"
 
 using namespace std;
 using namespace Eigen;
@@ -37,11 +38,13 @@ void Scene::load(const string &RESOURCE_DIR)
 	track = make_shared<SplineTrack>(Vector3d(0.0, 0.0, 0.0), 1.0);
 	slotParticle = make_shared<Particle>(sphereShape);
 	car = make_shared<Car>(RESOURCE_DIR, slotParticle);
+	ground = make_shared<Ground>();
 }
 
 void Scene::init()
 {
 	sphereShape->init();
+	ground->init();
 
 	// ! Remember to duplicate the starting and ending control points
 	// initialize the track by adding control points
@@ -123,6 +126,7 @@ void Scene::moveCounterClockwise()
 void Scene::draw(shared_ptr<MatrixStack> MV, const shared_ptr<Program> prog, const shared_ptr<Program> progSimple) const
 {
 	glUniform3fv(prog->getUniform("kdFront"), 1, Vector3f(1.0, 1.0, 1.0).data());
+	ground->draw(prog, MV);
 	car->draw(MV, prog);
 	prog->unbind();
 

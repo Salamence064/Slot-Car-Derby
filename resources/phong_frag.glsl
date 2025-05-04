@@ -2,7 +2,6 @@
 
 varying vec3 vPos; // in camera space
 varying vec3 vNor; // in camera space
-varying vec2 vTex;
 uniform vec3 kdFront;
 uniform vec3 kdBack;
 
