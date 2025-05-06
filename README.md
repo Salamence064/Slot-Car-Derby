@@ -45,4 +45,4 @@ ___
 ___
 
 ## Contributors
- * Thomas Ducote (thomas-ducote@tamu.edu) (832008563)
+ * Thomas Ducote (thomas-ducote@tamu.edu)
